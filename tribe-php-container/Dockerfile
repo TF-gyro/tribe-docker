@@ -16,7 +16,7 @@ RUN usermod -u 1000 www-data
 USER www-data
 RUN /usr/bin/env python3 -m ensurepip --upgrade
 RUN /usr/bin/env python3 -m pip install --upgrade pip
-RUN /usr/bin/env pip3 install s3cmd
+RUN /home/www-data/.local/bin/pip3 install s3cmd
 USER root
 
 # set php configuration values
