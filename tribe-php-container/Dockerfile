@@ -13,9 +13,9 @@ RUN apk --no-cache add python3
 RUN usermod -u 1000 www-data
 
 # install pip and s3cmd under user www-data
+USER www-data
 RUN /usr/bin/env python3 -m ensurepip --upgrade
 RUN /usr/bin/env python3 -m pip install --upgrade pip
-USER www-data
 RUN /usr/bin/env pip3 install s3cmd
 USER root
 
