@@ -8,7 +8,8 @@ services:
     restart: 'no'
     user: root
     volumes:
-      - ./db:/var/lib/mysql
+      - ./mysql/db:/var/lib/mysql
+      - ./mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
     ports:
       - "3307:3306"
     environment:
@@ -34,6 +35,5 @@ services:
     depends_on:
       - app
     volumes:
+      - ./src:/var/www
       - ./nginx:/etc/nginx/conf.d
-    volumes_from:
-      - app
