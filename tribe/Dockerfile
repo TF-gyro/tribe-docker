@@ -1,32 +1,50 @@
-FROM php:7.4.27-fpm-alpine
+FROM ubuntu:18.04
 
-RUN apk update
-RUN apk --no-cache add shadow
-RUN apk --no-cache add git
-RUN apk --no-cache add zip
-RUN apk --no-cache add unzip
-RUN apk --no-cache add poppler
-RUN apk --no-cache add ffmpeg
-RUN apk --no-cache add python3
+ENV DEBIAN_FRONTEND=noninteractive
 
-# change www-data's id to 1000
-RUN usermod -u 1000 www-data
+# configure timezone data
+RUN apt-get update && \
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
-# install pip and s3cmd under user www-data
-USER www-data
-RUN /usr/bin/env python3 -m ensurepip --upgrade
-RUN /usr/bin/env python3 -m pip install --upgrade pip
-RUN /home/www-data/.local/bin/pip3 install s3cmd
-USER root
+# install system packages
+RUN apt-get install -y apt-transport-https software-properties-common && \
+    add-apt-repository -y ppa:ondrej/php && \
+    apt-get install -y build-essential \
+        vim \
+        zip \
+        unzip \
+        p7zip-full \
+        curl \
+        s3cmd \
+        php7.4-fpm \
+        php7.4-mysqli \
+        php7.4-curl \
+        php7.4-cli \
+        php7.4-mbstring \
+        php7.4-gd \
+        php7.4-zip \
+        php7.4-xml \
+        poppler-utils \
+        python3-pip \
+        imagemagick \
+        ffmpeg \
+        net-tools \
+        nginx
+
+# install composer
+RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
+    php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 # set php configuration values
 WORKDIR /var/www
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "$PHP_INI_DIR/php.ini"
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' "$PHP_INI_DIR/php.ini"
-RUN sed -i 's/memory_limit = 128M/memory_limit = 2048M/' "$PHP_INI_DIR/php.ini"
+ENV PHP_INI_DIR='/etc/php/7.4/fpm'
+RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini" && \
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' "${PHP_INI_DIR}/php.ini" && \
+    sed -i 's/memory_limit = 128M/memory_limit = 2048M/' "${PHP_INI_DIR}/php.ini" && \
+    sed -i "\|include /etc/nginx/sites-enabled/*;|d" "/etc/nginx/nginx.conf"
 
-# install php extensions from mlocati image
-COPY --from=docker.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
-RUN install-php-extensions imagick mysqli @composer gd zip
+EXPOSE 80
 
+CMD /etc/init.d/php7.4-fpm start && service nginx start && tail --follow /var/www/logs/error.log
