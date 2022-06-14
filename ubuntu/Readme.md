@@ -11,8 +11,8 @@
 ## Tagging and uploading image to *Docker Hub*
 * Create an account on [Docker](https://hub.docker.io)
 * Log into your account with podman by running `podman login index.docker.io`
-* Tag your image `podman tag tribe_php <username>/php:latest`
-* Then publish your image on hub by running `podman push <username>/php:latest`
+* Tag your image `podman tag ubuntu_web <username>/ubuntu:latest`
+* Then publish your image on hub by running `podman push <username>/ubuntu:latest`
 
 ## Using the image
-To use the image that you created, simply do `podman pull docker.io/<username>/php:latest` and then `podman run docker.io/<username>/php:latest`
+To use the image that you created, simply do `podman pull docker.io/<username>/ubuntu:latest` and then `podman run docker.io/<username>/ubuntu:latest`
