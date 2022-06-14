@@ -1,16 +1,16 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # configure timezone data
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y tzdata && \
     ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
 # install system packages
 RUN apt-get install -y apt-transport-https software-properties-common && \
-    add-apt-repository -y ppa:ondrej/php && \
     apt-get install -y build-essential \
         vim \
         zip \
@@ -43,7 +43,7 @@ ENV PHP_INI_DIR='/etc/php/7.4/fpm'
 RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini" && \
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' "${PHP_INI_DIR}/php.ini" && \
     sed -i 's/memory_limit = 128M/memory_limit = 2048M/' "${PHP_INI_DIR}/php.ini" && \
-    sed -i "\|include /etc/nginx/sites-enabled/*;|d" "/etc/nginx/nginx.conf"
+    sed -i "\|include /etc/nginx/sites-enabled/\*;|d" "/etc/nginx/nginx.conf"
 
 EXPOSE 80
 
