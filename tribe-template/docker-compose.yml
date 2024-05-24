@@ -2,22 +2,22 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0.27
+    image: arm64v8/mysql:8.0.32
     container_name: db
     command: --authentication_policy=mysql_native_password
     restart: 'no'
     user: root
     volumes:
-      - ./lc/mysql/db:/var/lib/mysql
-      - ./lc/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ./lc/db:/var/lib/mysql
+      - .:/var/www
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=db_password
-      - MYSQL_DATABASE=db_database
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=media_archive
 
   app:
-    image: ajyotirmay/ubuntu:20.04-php7.4
+    image: ubuntu-nginx
     container_name: app
     restart: 'no'
     working_dir: /var/www/

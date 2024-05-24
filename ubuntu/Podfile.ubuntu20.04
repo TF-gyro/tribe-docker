@@ -7,10 +7,11 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y tzdata && \
     ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
-    dpkg-reconfigure --frontend noninteractive tzdata
+    dpkg-reconfigure tzdata
 
 # install system packages
-RUN apt-get install -y apt-transport-https software-properties-common && \
+RUN apt-get update && \
+    apt-get install -y apt-transport-https software-properties-common && \
     apt-get install -y build-essential \
         vim \
         zip \
@@ -32,7 +33,8 @@ RUN apt-get install -y apt-transport-https software-properties-common && \
         ffmpeg \
         net-tools \
         nginx \
-        git
+        git \
+        pdftk
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
@@ -50,4 +52,4 @@ RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini
 
 EXPOSE 80
 
-CMD /etc/init.d/php7.4-fpm start && service nginx start && tail --follow /var/www/logs/error.log
+CMD /etc/init.d/php7.4-fpm start && service nginx start && tail --follow /dev/null

@@ -12,8 +12,6 @@ server {
     proxy_read_timeout 60;
     fastcgi_read_timeout 60;
 
-    index index.html index.htm index.php;
-
     # disable .env and other hidden files, except .well-known
     location ~ /\.(?!well-known).* {
         deny all;
@@ -38,25 +36,14 @@ server {
 
     # for php
     # if the file exists, use it, otherwise pass it on to index.php
-    # location / {
-    #     include /etc/nginx/mime.types;
-    #     try_files $uri $uri/ /index.php$is_args$args;
-    # }
-
-    #for php
-    #if the file exists, use it, otherwise pass it on to index.php
     location / {
         include /etc/nginx/mime.types;
-        try_files $uri $uri.html $uri/ @extensionless-php;
-    }
-
-    location @extensionless-php {
-        rewrite ^(.*)$ $1.php last;
+        try_files $uri $uri/ /index.php$is_args$args;
     }
 
     # all .php files to use php fpm
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
     }
 }
