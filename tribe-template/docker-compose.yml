@@ -2,23 +2,24 @@ version: '3.8'
 
 services:
   db:
-    image: arm64v8/mysql:8.0.32
-    container_name: db
+    image: mysql:8.4.0
+    container_name: tribe-db
     command: --authentication_policy=mysql_native_password
     restart: 'no'
     user: root
     volumes:
-      - ./lc/db:/var/lib/mysql
-      - .:/var/www
+      - ./mysql/db:/var/lib/mysql
+      - ./mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ./tribe:/var/www
     ports:
       - "3307:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=media_archive
+      - MYSQL_DATABASE=local_db
 
   app:
-    image: ubuntu-nginx
-    container_name: app
+    image: ubuntu-tribe
+    container_name: tribe-app
     restart: 'no'
     working_dir: /var/www/
     depends_on:
@@ -26,5 +27,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www
-      - ./lc/nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d
+      - ./tribe/.env:/var/www/.env
+      - ./tribe/config:/var/www/config
+      - ./tribe/custom:/var/www/custom
+      - ./tribe/uploads:/var/www/uploads
+      - ./tribe/applications:/var/www/applications
