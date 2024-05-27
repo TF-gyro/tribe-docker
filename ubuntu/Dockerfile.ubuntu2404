@@ -13,28 +13,29 @@ RUN apt-get update && \
 RUN apt-get update && apt-get install -y software-properties-common apt-transport-https build-essential
 # RUN add-apt-repository ppa:ondrej/php
 RUN apt-get install -y vim \
-        zip \
-        unzip \
-        p7zip-full \
-        curl \
-        s3cmd \
-        php8.3-fpm \
-        php8.3-mysqli \
-        php8.3-curl \
-        php8.3-cli \
-        php8.3-mbstring \
-        php8.3-gd \
-        php8.3-zip \
-        php8.3-xml \
-        poppler-utils \
-        python3-pip \
-        imagemagick \
-        ffmpeg \
-        net-tools \
-        nginx \
-        git \
-        pdftk\
-        poppler-utils
+    zip \
+    unzip \
+    p7zip-full \
+    curl \
+    s3cmd \
+    php8.3-fpm \
+    php8.3-mysqli \
+    php8.3-curl \
+    php8.3-cli \
+    php8.3-mbstring \
+    php8.3-gd \
+    php8.3-zip \
+    php8.3-xml \
+    poppler-utils \
+    python3-pip \
+    imagemagick \
+    ffmpeg \
+    net-tools \
+    nginx \
+    git \
+    pdftk \
+    poppler-utils \
+    wget
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
@@ -49,6 +50,10 @@ RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1024M/' "${PHP_INI_DIR}/php.ini" && \
     sed -i 's/memory_limit = 128M/memory_limit = 2048M/' "${PHP_INI_DIR}/php.ini" && \
     sed -i "\|include /etc/nginx/sites-enabled/\*;|d" "/etc/nginx/nginx.conf"
+
+RUN wget https://github.com/tribe-framework/tribe/archive/refs/tags/v3.1.2.tar.gz -O tribe.tar.gz
+RUN tar -xzf tribe.tar.gz -C /var/www --strip-components=1 && rm tribe.tar.gz
+RUN composer u
 
 RUN service php8.3-fpm restart;
 

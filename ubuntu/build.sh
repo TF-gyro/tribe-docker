@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose --project-name 'ubuntu' build
+docker-compose --project-name 'tribe' build
