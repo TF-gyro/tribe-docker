@@ -55,6 +55,19 @@ RUN wget https://github.com/tribe-framework/tribe/archive/refs/tags/v3.1.2.tar.g
 RUN tar -xzf tribe.tar.gz -C /var/www --strip-components=1 && rm tribe.tar.gz
 RUN composer u
 
+WORKDIR applications
+
+# install nvm, node & ember junction
+RUN touch ~/.bashrc && chmod +x ~/.bashrc
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN bash -c ". ~/.nvm/nvm.sh && . ~/.bashrc && nvm install --lts"
+RUN bash -c ". ~/.nvm/nvm.sh && . ~/.bashrc && npm install -g ember-cli && \
+    ember new junction && cd junction && \
+    yes | ember install ember-tribe && \
+    yes | ember install ember-junction"
+
+WORKDIR /var/www
+
 RUN service php8.3-fpm restart;
 
 EXPOSE 80
