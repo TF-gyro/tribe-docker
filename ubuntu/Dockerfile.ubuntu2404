@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # configure timezone data
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y tzdata && \
+    apt-get install -y tzdata apt-utils && \
     ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
     dpkg-reconfigure tzdata
 
@@ -60,8 +60,11 @@ WORKDIR applications
 # install nvm, node & ember junction
 RUN touch ~/.bashrc && chmod +x ~/.bashrc
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-RUN bash -c ". ~/.nvm/nvm.sh && . ~/.bashrc && nvm install --lts"
-RUN bash -c ". ~/.nvm/nvm.sh && . ~/.bashrc && npm install -g ember-cli && \
+
+ENV NVM_DIR="$HOME/.nvm"
+
+RUN bash -c ". ~/.nvm/nvm.sh && nvm install --lts"
+RUN bash -c ". ~/.nvm/nvm.sh && npm install -g ember-cli && \
     ember new junction && cd junction && \
     yes | ember install ember-tribe && \
     yes | ember install ember-junction"
