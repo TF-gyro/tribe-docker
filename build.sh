@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker build -t tribe .
+docker build -t tribeframework/tribe:latest .
