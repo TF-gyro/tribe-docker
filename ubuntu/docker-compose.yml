@@ -1,7 +1,0 @@
-version: '3.8'
-
-services:
-  tribe:
-    build:
-      context: ./
-      dockerfile: Dockerfile.ubuntu2404
