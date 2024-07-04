@@ -51,16 +51,18 @@ RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini
     sed -i 's/memory_limit = 128M/memory_limit = 2048M/' "${PHP_INI_DIR}/php.ini" && \
     sed -i "\|include /etc/nginx/sites-enabled/\*;|d" "/etc/nginx/nginx.conf"
 
-RUN wget https://github.com/tribe-framework/tribe/archive/refs/tags/v3.1.2.tar.gz -O tribe.tar.gz
+RUN wget https://github.com/tribe-framework/tribe/archive/refs/heads/master.tar.gz -O tribe.tar.gz
 RUN tar -xzf tribe.tar.gz -C /var/www --strip-components=1 && rm tribe.tar.gz
 RUN composer u
 
-WORKDIR applications
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz -O pma.tar.gz
+RUN mkdir /var/www/phpmyadmin && tar -xzf pma.tar.gz -C /var/www/phpmyadmin --strip-components=1 && rm pma.tar.gz
 
-WORKDIR /var/www
+RUN chown -R www-data: uploads/ logs/
 
 RUN service php8.3-fpm restart;
 
 EXPOSE 80
+EXPOSE 81
 
 CMD /etc/init.d/php8.3-fpm start && service nginx start && tail --follow /dev/null
