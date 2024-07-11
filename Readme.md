@@ -4,7 +4,7 @@
 
 ## Building image
 * You can modify `Dockerfile` to personalize the `php` image to your liking.
-* You can then build it by running the command `docker build -t tribeframework/tribe:latest .`
+* You can then build the image using script `build.sh`. Pass `--no-cache` to disable using the cached builds
 
 ## Tagging and uploading image to *Docker Hub*
 * Create an account on [Docker](https://hub.docker.io)
