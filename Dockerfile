@@ -54,16 +54,16 @@ RUN sed -i 's/post_max_size = 8M/post_max_size = 1024M/' "${PHP_INI_DIR}/php.ini
 RUN wget https://github.com/tribe-framework/tribe/archive/refs/tags/v3.1.6.tar.gz -O tribe.tar.gz
 RUN tar -xzf tribe.tar.gz -C /var/www --strip-components=1 && rm tribe.tar.gz
 
-RUN wget https://github.com/tribe-framework/ember-junction-dist/archive/refs/tags/v1.0.2.tar.gz -O junction.tar.gz
-RUN mkdir junction-dist && \
-    tar -xzf junction.tar.gz -C junction-dist --strip-components=1 && \
-    mv junction-dist/applications/junction . && \
-    rm -rf junction.tar.gz junction-dist
-
 RUN composer u
 
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz -O pma.tar.gz
 RUN mkdir /var/www/phpmyadmin && tar -xzf pma.tar.gz -C /var/www/phpmyadmin --strip-components=1 && rm pma.tar.gz
+
+RUN wget https://github.com/tribe-framework/flame-junction-dist/archive/refs/tags/v1.1.0.tar.gz -O junction.tar.gz
+RUN mkdir junction-dist && \
+    tar -xzf junction.tar.gz -C junction-dist --strip-components=1 && \
+    mv junction-dist/applications/junction . && \
+    rm -rf junction.tar.gz junction-dist
 
 RUN chown -R www-data: uploads/ logs/
 
