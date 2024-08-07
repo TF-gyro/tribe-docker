@@ -59,11 +59,11 @@ RUN composer u
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz -O pma.tar.gz
 RUN mkdir /var/www/phpmyadmin && tar -xzf pma.tar.gz -C /var/www/phpmyadmin --strip-components=1 && rm pma.tar.gz
 
-RUN wget https://github.com/tribe-framework/flame-junction-dist/archive/refs/tags/v1.1.0.tar.gz -O junction.tar.gz
+RUN wget https://github.com/tribe-framework/flame-junction-dist/archive/refs/tags/v1.1.2.tar.gz -O junction.tgz
 RUN mkdir junction-dist && \
-    tar -xzf junction.tar.gz -C junction-dist --strip-components=1 && \
+    tar -xzf junction.tgz -C junction-dist --strip-components=1 && \
     mv junction-dist/applications/junction . && \
-    rm -rf junction.tar.gz junction-dist
+    rm -rf junction.tgz junction-dist
 
 RUN chown -R www-data: uploads/ logs/
 

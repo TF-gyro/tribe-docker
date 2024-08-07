@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+VER=$(curl https://api.github.com/repos/tribe-framework/flame-junction-dist/tags | jq -r '.[0].name')
+
+sed -i "s|flame-junction-dist.*.tar.gz|flame-junction-dist/archive/refs/tags/$VER.tar.gz|" Dockerfile
+
 if [ "$1" == "--no-cache" ]; then
     # don't use cache
     docker build --no-cache -t tribeframework/tribe:latest .
