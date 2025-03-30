@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-apt-get update && apt-get upgrade -y
+apt-get upgrade -y
 
 # configure timezone data
 apt-get install -y tzdata apt-utils software-properties-common apt-transport-https build-essential
@@ -12,7 +12,6 @@ apt-get update && apt-get install -y vim \
     zip \
     unzip \
     p7zip-full \
-    curl \
     s3cmd \
     php8.3-fpm \
     php8.3-mysqli \

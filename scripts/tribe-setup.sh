@@ -27,5 +27,8 @@ composer u
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.tar.gz -O pma.tar.gz
 mkdir /var/www/phpmyadmin && tar -xzf pma.tar.gz -C /var/www/phpmyadmin --strip-components=1
 
+mkdir uploads logs
+chown -R www-data: uploads/ logs/
+
 # cleanup packages
 rm tribe.tar.gz pma.tar.gz
